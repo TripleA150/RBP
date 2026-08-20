@@ -362,6 +362,7 @@ rm -rf /var/cache/knot-resolver2/*
 rm -rf /etc/openvpn/server/*
 rm -rf /etc/openvpn/client/*
 rm -rf /etc/wireguard/templates/*
+rm -f /etc/ocserv/ocserv.conf
 rm -rf /etc/ocserv/templates/*
 
 # Удаляем скомпилированный патченный OpenVPN
