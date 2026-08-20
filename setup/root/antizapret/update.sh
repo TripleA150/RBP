@@ -24,6 +24,9 @@ mkdir -p download
 UPDATE_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/update.sh
 UPDATE_PATH=update.sh
 
+CUSTOM_UPDATE_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/custom-update.sh
+CUSTOM_UPDATE_PATH=custom-update.sh
+
 PARSE_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/parse.sh
 PARSE_PATH=parse.sh
 
@@ -125,6 +128,7 @@ function download {
 }
 
 download $UPDATE_PATH $UPDATE_LINK
+download $CUSTOM_UPDATE_PATH $CUSTOM_UPDATE_LINK
 download $PARSE_PATH $PARSE_LINK
 download $DOALL_PATH $DOALL_LINK
 
