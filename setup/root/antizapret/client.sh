@@ -553,12 +553,12 @@ if ! [[ "$OPTION" =~ ^([1-9]|1[0-2])$ ]]; then
 	echo '    4) WireGuard/AmneziaWG - Add client'
 	echo '    5) WireGuard/AmneziaWG - Delete client'
 	echo '    6) WireGuard/AmneziaWG - List clients'
-	echo '    7) (Re)create client profile files'
-	echo '    8) Backup configuration and clients'
-	echo '    9) Restore configuration and clients from backup'
-	echo '   10) OpenConnect - Add client/Change client password'
-	echo '   11) OpenConnect - Delete client'
-	echo '   12) OpenConnect - List clients'
+	echo '    7) OpenConnect - Add client/Change client password'
+	echo '    8) OpenConnect - Delete client'
+	echo '    9) OpenConnect - List clients'
+	echo '    10) (Re)create client profile files'
+	echo '    11) Backup configuration and clients'
+	echo '    12) Restore configuration and clients from backup'
 	until [[ "$OPTION" =~ ^([1-9]|1[0-2])$ ]]; do
 		read -rp 'Option choice [1-12]: ' -e OPTION
 	done
@@ -598,34 +598,32 @@ case "$OPTION" in
 		listWireGuard
 		;;
 	7)
-		echo '(Re)create client profile files'
-		recreate
-		;;
-	8)
-		echo 'Backup configuration and clients'
-		backup
-		;;
-	9)
-		echo 'Restore configuration and clients from backup'
-		restore
-		;;
-	10)
 		echo "OpenConnect - Add client/Change client password $CLIENT_NAME"
 		askClientName
 		initOpenConnect
-		mkdir -p /root/antizapret/client/openconnect/antizapret
-		mkdir -p /root/antizapret/client/openconnect/vpn
 		addOpenConnect
 		;;
-	11)
+	8)
 		echo "OpenConnect - Delete client $CLIENT_NAME"
 		listOpenConnect
 		askClientName
 		deleteOpenConnect
 		;;
-	12)
+	9)
 		echo 'OpenConnect - List clients'
 		listOpenConnect
+		;;
+	10)
+		echo '(Re)create client profile files'
+		recreate
+		;;
+	11)
+		echo 'Backup configuration and clients'
+		backup
+		;;
+	12)
+		echo 'Restore configuration and clients from backup'
+		restore
 		;;
 esac
 exit 0
