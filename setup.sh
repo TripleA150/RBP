@@ -643,7 +643,7 @@ sed -i '/function policy\.PASS(state, _)/,/^end$/s/return state/return nil/' /us
 # Настраиваем сервера OpenVPN и WireGuard/AmneziaWG для первого запуска
 # Пересоздаем для всех существующих пользователей файлы подключений
 # Если пользователей нет, то создаем новых пользователей 'antizapret-client' для OpenVPN и WireGuard/AmneziaWG
-/root/antizapret/client.sh 7
+/root/antizapret/client.sh 10
 
 # Включим обновляемые службы
 systemctl enable kresd@1
