@@ -15,6 +15,8 @@ URLS=(
   "$REPO/include-hosts.txt"
   "$REPO/include-ips.txt"
   "$REPO/remove-hosts.txt"
+  "$REPO/rpz.txt"
+  "$REPO/rpz2.txt"
 )
 
 cd /root/antizapret
