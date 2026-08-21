@@ -286,16 +286,6 @@ if [[ -n "$OPENCONNECT_IP" && "$OPENCONNECT_IP" != "$OPENVPN_IP" && "$OPENCONNEC
 	iptables -w -t nat -A POSTROUTING -d $OPENCONNECT_IP -j SNAT --to-source $DEFAULT_IP
 fi
 
-# Сброс счётчиков
-iptables -w -Z
-iptables -w -t nat -Z
-iptables -w -t mangle -Z
-iptables -w -t raw -Z
-ip6tables -w -Z
-ip6tables -w -t nat -Z
-ip6tables -w -t mangle -Z
-ip6tables -w -t raw -Z
-
 # Сохранение новых правил iptables
 netfilter-persistent save
 systemctl enable netfilter-persistent
