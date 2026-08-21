@@ -119,7 +119,7 @@ done
 echo
 echo 'OpenVPN DCO lowers CPU load, boosts data speeds, and only supports AES-128-GCM, AES-256-GCM and CHACHA20-POLY1305 encryption'
 until [[ "$OPENVPN_DCO" =~ (y|n) ]]; do
-	read -rp 'Turn on OpenVPN DCO? [y/n]: ' -e -i n OPENVPN_DCO
+	read -rp 'Turn on OpenVPN DCO? [y/n]: ' -e -i y OPENVPN_DCO
 done
 echo
 until [[ "$ANTIZAPRET_WARP" =~ (y|n) ]]; do
