@@ -39,11 +39,11 @@ DOMAIN_PATH=download/bol-van-domain.txt
 DOMAIN2_LINK=https://antifilter.download/list/domains.lst
 DOMAIN2_PATH=download/antifilter-download-domain.txt
 
-RPZ_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/rpz.txt
-RPZ_PATH=download/rpz.txt
+DENY_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny.txt
+DENY_PATH=download/deny.txt
 
-RPZ2_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/rpz2.txt
-RPZ2_PATH=download/rpz2.txt
+DENY2_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny2.txt
+DENY2_PATH=download/deny2.txt
 
 INCLUDE_HOSTS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/include-hosts.txt
 INCLUDE_HOSTS_PATH=download/include-hosts.txt
@@ -99,26 +99,19 @@ WHATSAPP_IPS_PATH=download/whatsapp-ips.txt
 ROBLOX_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/roblox-ips.txt
 ROBLOX_IPS_PATH=download/roblox-ips.txt
 
-PROXY=https://api.codetabs.com/v1/proxy?quest=
+PROXY=https://proxy.cors.sh/
 
 function download {
 	local path="${1}"
 	local tmp_path="${path}.tmp"
 	local link="$2"
 	echo "$path"
-	if curl -fL --connect-timeout 30 "$link" -o "$tmp_path"; then
-		local_size="$(stat -c '%s' "$tmp_path")"
-		header="$(curl -fsSLI --connect-timeout 30 "$link")" || exit 3
-		remote_size="$(echo "$header" | grep -i content-length | cut -d ':' -f 2 | sed 's/[[:space:]]//g')"
-		if [[ -n "$remote_size" && "$local_size" != "$remote_size" ]]; then
-			echo "Failed to download $path! Size on server is different"
-			rm -f "$tmp_path"
-			exit 4
-		fi
-	else
+	
+	if ! curl -fL --connect-timeout 30 --max-time 300 "$link" -o "$tmp_path"; then
 		echo 'Trying connect via proxy...'
-		curl -fL --connect-timeout 30 "$PROXY$link" -o "$tmp_path" || exit 2
+		curl -fL --connect-timeout 30 --max-time 300 "$PROXY$link" -o "$tmp_path" || exit 2
 	fi
+
 	mv -f "$tmp_path" "$path"
 	if [[ "$path" == *.sh ]]; then
 		chmod +x "$path"
@@ -137,8 +130,8 @@ source setup
 if [[ -z "$1" || "$1" == 'host' || "$1" == 'hosts' || "$1" == 'noclear' || "$1" == 'noclean' ]]; then
 	download $DOMAIN_PATH $DOMAIN_LINK
 	( download $DOMAIN2_PATH $DOMAIN2_LINK ) || true
-	download $RPZ_PATH $RPZ_LINK
-	download $RPZ2_PATH $RPZ2_LINK
+	download $DENY_PATH $DENY_LINK
+	download $DENY2_PATH $DENY2_LINK
 	download $INCLUDE_HOSTS_PATH $INCLUDE_HOSTS_LINK
 	download $REMOVE_HOSTS_PATH $REMOVE_HOSTS_LINK
 
