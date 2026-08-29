@@ -12,6 +12,13 @@ export LC_ALL=C
 # 	exit 2
 # fi
 
+# Остановим фоновые обновления системы
+systemctl stop apt-daily.timer
+systemctl stop apt-daily-upgrade.timer
+systemctl stop apt-daily
+systemctl stop apt-daily-upgrade
+systemctl stop unattended-upgrades
+
 # Проверка прав root
 if [[ "$EUID" -ne 0 ]]; then
 	echo 'Error: You need to run this as root!'
@@ -305,11 +312,6 @@ echo
 #done
 #echo
 echo 'Installation, please wait...'
-
-# Отключим фоновые обновления системы
-systemctl stop unattended-upgrades
-systemctl stop apt-daily.timer
-systemctl stop apt-daily-upgrade.timer
 
 # Остановим и выключим обновляемые службы
 systemctl disable --now kresd@1
@@ -636,6 +638,7 @@ fi
 
 # Изменяем поведение policy.PASS в Knot Resolver
 sed -i '/function policy\.PASS(state, _)/,/^end$/s/return state/return nil/' /usr/lib/knot-resolver/kres_modules/policy.lua
+sed -i -z -E 's/policy\.DENY_MSG\([^)]*kres\.extended_error\.NOTSUP[^)]*\)/policy.DENY/g' /usr/lib/knot-resolver/kres_modules/policy.lua
 
 # Загружаем и создаем списки исключений
 /root/antizapret/doall.sh noclear
@@ -671,7 +674,7 @@ fi
 
 ERRORS=
 
-if [[ "$OPENVPN_PATCH" != '0' ]]; then
+if [[ "$OPENVPN_PATCH" != '1' ]]; then
 	if ! /root/antizapret/patch-openvpn.sh "$OPENVPN_PATCH"; then
 		ERRORS+="\n\e[1;31mAnti-censorship patch for OpenVPN has not installed!\e[0m Please run '/root/antizapret/patch-openvpn.sh' after rebooting\n"
 	fi
