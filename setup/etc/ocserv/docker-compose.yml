@@ -1,0 +1,26 @@
+x-common: &common
+  image: ustclug/ocserv:latest
+  restart: always
+  network_mode: host
+  cap_add: [NET_ADMIN]
+  devices:
+    - /dev/net/tun:/dev/net/tun
+  entrypoint: ["ocserv", "--foreground"]
+  volumes:
+    - ./:/etc/ocserv:ro
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  ocserv-antizapret:
+    <<: *common
+    container_name: ocserv-antizapret
+    command: ["--config", "/etc/ocserv/antizapret.conf"]
+
+  ocserv-vpn:
+    <<: *common
+    container_name: ocserv-vpn
+    command: ["--config", "/etc/ocserv/vpn.conf"]

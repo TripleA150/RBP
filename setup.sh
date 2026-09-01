@@ -427,16 +427,13 @@ if [[ "$OS" == 'ubuntu' ]] && (( VERSION < 26 )); then
 elif [[ "$OS" == 'debian' ]] && (( VERSION < 14 )); then
 	INSTALL="-t $CODENAME-backports linux-image-$ARCH linux-headers-$ARCH"
 fi
-apt-get install -y $INSTALL git openvpn iptables easy-rsa gawk knot-resolver idn sipcalc python3-pip wireguard diffutils socat lua-cqueues ipset irqbalance unattended-upgrades jq ethtool iproute2 ocserv
-
-# Отключаем штатную службу ocserv из пакета
-systemctl disable --now ocserv.socket &>/dev/null || true
-systemctl disable --now ocserv &>/dev/null || true
-systemctl mask ocserv.socket &>/dev/null || true
-systemctl mask ocserv &>/dev/null || true
+apt-get install -y $INSTALL git openvpn iptables easy-rsa gawk knot-resolver idn sipcalc python3-pip wireguard diffutils socat lua-cqueues ipset irqbalance unattended-upgrades jq ethtool iproute2
 apt-get autoremove --purge -y
 apt-get clean
 dpkg-reconfigure -f noninteractive unattended-upgrades
+
+# Устанавливаем Docker
+curl -fsSL https://get.docker.com | sh
 
 # Клонируем репозиторий и устанавливаем dnslib
 rm -rf /tmp/dnslib
@@ -649,6 +646,7 @@ sed -i -z -E 's/policy\.DENY_MSG\([^)]*kres\.extended_error\.NOTSUP[^)]*\)/polic
 /root/antizapret/client.sh 10
 
 # Включим обновляемые службы
+systemctl daemon-reload
 systemctl enable kresd@1
 systemctl enable kresd@2
 systemctl enable antizapret
@@ -667,9 +665,8 @@ if [[ "$WIREGUARD_ENABLE" == 'y' ]]; then
 	systemctl enable wg-quick@vpn
 fi
 if [[ "$OPENCONNECT_ENABLE" == 'y' ]]; then
-	systemctl daemon-reload
-	systemctl enable ocserv@antizapret
-	systemctl enable ocserv@vpn
+	docker compose -f /etc/ocserv/docker-compose.yml down -v || true
+	docker compose -f /etc/ocserv/docker-compose.yml up -d
 fi
 
 ERRORS=
