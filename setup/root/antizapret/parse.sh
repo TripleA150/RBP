@@ -11,6 +11,24 @@ handle_error() {
 }
 trap 'handle_error $LINENO "$BASH_COMMAND"' ERR
 
+OCSERV_COMPOSE=/etc/ocserv/docker-compose.yml
+
+reloadOcserv(){
+	local service="$1" container
+	[[ -f "$OCSERV_COMPOSE" ]] || return 0
+	command -v docker &>/dev/null || return 0
+	container="$(docker compose -f "$OCSERV_COMPOSE" ps -q "$service" 2>/dev/null | head -n 1 || true)"
+	if [[ -z "$container" ]] || [[ "$(docker inspect -f '{{.State.Running}}' "$container" 2>/dev/null || true)" != 'true' ]]; then
+		echo "Warning: container $service is not running, new configuration will apply on its next start"
+		return 0
+	fi
+	if docker kill -s HUP "$container" &>/dev/null; then
+		echo "Reloaded $service configuration"
+	else
+		echo "Warning: failed to reload $service configuration"
+	fi
+}
+
 if [[ -n "$1" && "$1" != 'ip' && "$1" != 'ips' && "$1" != 'host' && "$1" != 'hosts' && "$1" != 'noclear' && "$1" != 'noclean' ]]; then
 	echo "Ignored invalid parameter: $1"
 	set --
@@ -136,14 +154,14 @@ if [[ -z "$1" || "$1" == 'ip' || "$1" == 'ips' || "$1" == 'noclear' || "$1" == '
 			# Обновляем конфигурацию AntiZapret VPN только если файл изменился
 			if ! diff -q result/ocserv-antizapret.conf /etc/ocserv/antizapret.conf &>/dev/null; then
 				cp -f result/ocserv-antizapret.conf /etc/ocserv/antizapret.conf
-				systemctl is-active --quiet ocserv@antizapret && systemctl reload ocserv@antizapret || true
+				reloadOcserv ocserv-antizapret
 			fi
 		fi
 		if [[ -f /etc/ocserv/templates/vpn.conf ]]; then
 			# Обновляем конфигурацию full VPN только если файл изменился
 			if ! diff -q /etc/ocserv/templates/vpn.conf /etc/ocserv/vpn.conf &>/dev/null; then
 				cp -f /etc/ocserv/templates/vpn.conf /etc/ocserv/vpn.conf
-				systemctl is-active --quiet ocserv@vpn && systemctl reload ocserv@vpn || true
+				reloadOcserv ocserv-vpn
 			fi
 		fi
 		echo "$(wc -l < result/ocserv-routes.conf) - ocserv-routes.conf"

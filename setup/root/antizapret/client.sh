@@ -371,6 +371,19 @@ addOpenConnect(){
 	echo "OpenConnect profile files (re)created for client '$CLIENT_NAME' at /root/antizapret/client/openconnect"
 }
 
+disconnectOpenConnect(){
+	local service="$1" socket="$2" container
+	[[ -f /etc/ocserv/docker-compose.yml ]] || return 0
+	command -v docker &>/dev/null || return 0
+	container="$(docker compose -f /etc/ocserv/docker-compose.yml ps -q "$service" 2>/dev/null | head -n 1 || true)"
+	[[ -n "$container" ]] || return 0
+	if ! docker exec "$container" sh -c 'command -v occtl' &>/dev/null; then
+		echo "Warning: occtl not found in container '$service', client '$CLIENT_NAME' stays connected until session timeout"
+		return 0
+	fi
+	docker exec "$container" occtl -s "$socket" disconnect user "$CLIENT_NAME" &>/dev/null || true
+}
+
 deleteOpenConnect(){
 	setServerHost_FileName "$OPENCONNECT_HOST"
 	echo
@@ -387,8 +400,8 @@ deleteOpenConnect(){
 	rm -f /root/antizapret/client/openconnect/antizapret/"$FILE_NAME".txt
 	rm -f /root/antizapret/client/openconnect/vpn/vpn-"$FILE_NAME".txt
 
-	occtl -s /run/occtl-antizapret.socket disconnect user "$CLIENT_NAME" &>/dev/null || true
-	occtl -s /run/occtl-vpn.socket disconnect user "$CLIENT_NAME" &>/dev/null || true
+	disconnectOpenConnect ocserv-antizapret /run/occtl-antizapret.socket
+	disconnectOpenConnect ocserv-vpn /run/occtl-vpn.socket
 
 	echo "OpenConnect client '$CLIENT_NAME' successfully deleted"
 }

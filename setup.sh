@@ -341,12 +341,9 @@ apt-get purge -y upower
 apt-get purge -y multipath-tools
 apt-get purge -y rsyslog
 apt-get purge -y udisks2
-apt-get purge -y qemu-guest-agent
 apt-get purge -y tuned
 apt-get purge -y sysstat
-apt-get purge -y acpid
 apt-get purge -y fwupd
-# apt-get purge -y watchdog
 apt-get purge -y pcscd
 apt-get purge -y packagekit
 
@@ -614,13 +611,13 @@ fi
 # Используем альтернативный диапазон клиентских IPv4-адресов
 # 10.28.0.0/15 => 172.28.0.0/15
 if [[ "$ALTERNATIVE_CLIENT_IP" == 'y' ]]; then
-	sed -i 's/10\./172\./g' /etc/knot-resolver/kresd.conf
-	sed -i 's/10\./172\./g' /etc/openvpn/server/*.conf
-	sed -i 's/10\./172\./g' /etc/wireguard/templates/*.conf
-	sed -i 's/10\./172\./g' /etc/ocserv/templates/antizapret.conf /etc/ocserv/templates/vpn.conf
-	find /etc/wireguard -name '*.conf' -exec sed -i 's/s = 10\./s = 172\./g' {} +
+	sed -i 's/\b10\.2\([89]\)\./172.2\1./g' /etc/knot-resolver/kresd.conf
+	sed -i 's/\b10\.2\([89]\)\./172.2\1./g' /etc/openvpn/server/*.conf
+	sed -i 's/\b10\.2\([89]\)\./172.2\1./g' /etc/wireguard/templates/*.conf
+	sed -i 's/\b10\.2\([89]\)\./172.2\1./g' /etc/ocserv/templates/antizapret.conf /etc/ocserv/templates/vpn.conf
+	find /etc/wireguard -name '*.conf' -exec sed -i 's/s = 10\.2\([89]\)\./s = 172.2\1./g' {} +
 else
-	find /etc/wireguard -name '*.conf' -exec sed -i 's/s = 172\./s = 10\./g' {} +
+	find /etc/wireguard -name '*.conf' -exec sed -i 's/s = 172\.2\([89]\)\./s = 10.2\1./g' {} +
 fi
 
 # Запрещаем несколько одновременных подключений к OpenVPN для одного клиента

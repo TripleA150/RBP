@@ -130,12 +130,9 @@ apt-get purge -y upower
 apt-get purge -y multipath-tools
 apt-get purge -y rsyslog
 apt-get purge -y udisks2
-apt-get purge -y qemu-guest-agent
 apt-get purge -y tuned
 apt-get purge -y sysstat
-apt-get purge -y acpid
 apt-get purge -y fwupd
-# apt-get purge -y watchdog
 apt-get purge -y pcscd
 apt-get purge -y packagekit
 
