@@ -99,6 +99,8 @@ xbox-dns.ru CNAME .
 *.xbox-dns.ru CNAME .
 dns.malw.link CNAME .
 *.dns.malw.link CNAME .
+geohide.ru CNAME .
+*.geohide.ru CNAME .
 dns.nullsproxy.com CNAME .
 *.dns.nullsproxy.com CNAME .
 dns.apple.com CNAME .
@@ -147,8 +149,7 @@ dns.dnswarden.com CNAME .
 dnsbl.manitu.net CNAME .
 *.dnsbl.manitu.net CNAME .
 
-mcc255.pub.3gppnetwork.org CNAME .
-*.mcc255.pub.3gppnetwork.org CNAME .
+*.pub.3gppnetwork.org CNAME .
 
 *.rarbg.me CNAME .
 *.rarbg.com CNAME .
@@ -164,23 +165,43 @@ retracker.lanta-net.ru CNAME .
 tracker.tfile.co CNAME .
 tracker.openbittorrent.com A 52.223.13.41
 
+ntc.party A 130.255.77.28
+*.ntc.party A 130.255.77.28
+
+image.tmdb.org A 185.59.220.198
+*.image.tmdb.org A 185.59.220.198
+image.tmdb.org A 185.59.220.199
+*.image.tmdb.org A 185.59.220.199
+image.tmdb.org A 169.150.247.35
+*.image.tmdb.org A 169.150.247.35
+image.tmdb.org A 169.150.247.36
+*.image.tmdb.org A 169.150.247.36
+
+themoviedb.org A 3.160.150.117
+*.themoviedb.org A 3.160.150.117
+themoviedb.org A 3.160.150.18
+*.themoviedb.org A 3.160.150.18
+themoviedb.org A 18.165.140.30
+*.themoviedb.org A 18.165.140.30
+themoviedb.org A 18.165.140.10
+*.themoviedb.org A 18.165.140.10
+
+media.themoviedb.org A 185.111.111.157
+*.media.themoviedb.org A 185.111.111.157
+media.themoviedb.org A 185.111.111.158
+*.media.themoviedb.org A 185.111.111.158
+media.themoviedb.org A 51.83.172.163
+*.media.themoviedb.org A 51.83.172.163
+media.themoviedb.org A 37.19.203.178
+*.media.themoviedb.org A 37.19.203.178
+
+tracker.openbittorrent.com A 52.223.13.41
+
 ; https://habr.com/ru/articles/1006666
-redirector.googlevideo.com CNAME .
-checkip.amazonaws.com CNAME .
-icanhazip.com CNAME .
-*.icanhazip.com CNAME .
-ifconfig.co CNAME .
-*.ifconfig.co CNAME .
-ipify.org CNAME .
-*.ipify.org CNAME .
-myip.com CNAME .
-*.myip.com CNAME .
-ipapi.co CNAME .
-*.ipapi.co CNAME .
-eth0.me CNAME .
-*.eth0.me CNAME .
-ip.sb CNAME .
-*.ip.sb CNAME .
+oneme.ru CNAME .
+*.oneme.ru CNAME .
+max.ru CNAME .
+*.max.ru CNAME .
 
 ; https://habr.com/ru/articles/1000792
 telega.info CNAME .
@@ -197,4 +218,8 @@ apptracer.ru CNAME .
 ; https://habr.com/ru/articles/1046710
 reef.vk-cdn.net CNAME .
 *.reef.vk-cdn.net CNAME .
+oneme.app CNAME .
+*.oneme.app CNAME .
+rustore.ru CNAME .
+*.rustore.ru CNAME .
 ; НЕ РЕДАКТИРУЙТЕ ЭТОТ ФАЙЛ!

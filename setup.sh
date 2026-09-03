@@ -13,11 +13,11 @@ export LC_ALL=C
 # fi
 
 # Остановим фоновые обновления системы
-systemctl stop apt-daily.timer
-systemctl stop apt-daily-upgrade.timer
-systemctl stop apt-daily
-systemctl stop apt-daily-upgrade
-systemctl stop unattended-upgrades
+systemctl stop apt-daily.timer 2>/dev/null
+systemctl stop apt-daily-upgrade.timer 2>/dev/null
+systemctl stop apt-daily 2>/dev/null
+systemctl stop apt-daily-upgrade 2>/dev/null
+systemctl stop unattended-upgrades 2>/dev/null
 
 # Проверка прав root
 if [[ "$EUID" -ne 0 ]]; then
@@ -116,12 +116,12 @@ until [[ "$OPENCONNECT_ENABLE" =~ (y|n) ]]; do
 done
 echo
 echo 'Choose anti-censorship patch for OpenVPN (UDP only):'
-echo '    0) None        - Do not install anti-censorship patch, or remove if already installed'
-echo '    1) Random      - Recommended by default, randomly selects Strong or Error-Free'
-echo '    2) Strong      - Better protocol masking'
-echo '    3) Error-Free  - Use if Strong patch causes connection error, recommended for routers'
-until [[ "$OPENVPN_PATCH" =~ ^[0-3]$ ]]; do
-	read -rp 'Version choice [0-3]: ' -e -i 3 OPENVPN_PATCH
+echo '    1) None        - Do not install anti-censorship patch, or remove if already installed'
+echo '    2) Random      - Recommended by default, randomly selects Strong or Error-Free'
+echo '    3) Strong      - Better protocol masking'
+echo '    4) Error-Free  - Use if Strong patch causes connection error, recommended for routers'
+until [[ "$OPENVPN_PATCH" =~ ^[1-4]$ ]]; do
+	read -rp 'Version choice [1-4]: ' -e -i 4 OPENVPN_PATCH
 done
 echo
 echo 'OpenVPN DCO lowers CPU load, boosts data speeds, and only supports AES-128-GCM, AES-256-GCM and CHACHA20-POLY1305 encryption'
@@ -505,8 +505,8 @@ ANTIZAPRET_ADBLOCK=$ANTIZAPRET_ADBLOCK
 VPN_ADBLOCK=$VPN_ADBLOCK
 ALTERNATIVE_CLIENT_IP=$ALTERNATIVE_CLIENT_IP
 ALTERNATIVE_FAKE_IP=$ALTERNATIVE_FAKE_IP
-OPENVPN_BACKUP_TCP=$OPENVPN_BACKUP_TCP
 OPENVPN_BACKUP_UDP=$OPENVPN_BACKUP_UDP
+OPENVPN_BACKUP_TCP=$OPENVPN_BACKUP_TCP
 WIREGUARD_BACKUP=$WIREGUARD_BACKUP
 OPENVPN_DUPLICATE=$OPENVPN_DUPLICATE
 OPENVPN_LOG=$OPENVPN_LOG
@@ -633,7 +633,7 @@ if [[ "$OPENVPN_LOG" == 'y' ]]; then
 	sed -i '/^#\(verb\|log\)/s/^#//' /etc/openvpn/server/*.conf
 fi
 
-# Изменяем поведение policy.PASS в Knot Resolver
+# Изменяем поведение Knot Resolver
 sed -i '/function policy\.PASS(state, _)/,/^end$/s/return state/return nil/' /usr/lib/knot-resolver/kres_modules/policy.lua
 sed -i -z -E 's/policy\.DENY_MSG\([^)]*kres\.extended_error\.NOTSUP[^)]*\)/policy.DENY/g' /usr/lib/knot-resolver/kres_modules/policy.lua
 

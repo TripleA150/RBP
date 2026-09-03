@@ -33,17 +33,17 @@ PARSE_PATH=parse.sh
 DOALL_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/doall.sh
 DOALL_PATH=doall.sh
 
-DOMAIN_LINK=https://raw.githubusercontent.com/bol-van/rulist/refs/heads/main/reestr_hostname.txt
+DOMAIN_LINK=https://raw.githubusercontent.com/bol-van/rulist/main/reestr_hostname.txt
 DOMAIN_PATH=download/bol-van-domain.txt
 
 DOMAIN2_LINK=https://antifilter.download/list/domains.lst
 DOMAIN2_PATH=download/antifilter-download-domain.txt
 
-DENY_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny.txt
-DENY_PATH=download/deny.txt
+DENY_RPZ_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny-rpz.txt
+DENY_RPZ_PATH=download/deny-rpz.txt
 
-DENY2_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny2.txt
-DENY2_PATH=download/deny2.txt
+DENY2_RPZ_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny2-rpz.txt
+DENY2_RPZ_PATH=download/deny2-rpz.txt
 
 INCLUDE_HOSTS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/include-hosts.txt
 INCLUDE_HOSTS_PATH=download/include-hosts.txt
@@ -63,7 +63,7 @@ EXCLUDE_ADBLOCK_HOSTS_PATH=download/exclude-adblock-hosts.txt
 ADGUARD_LINK=https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
 ADGUARD_PATH=download/adguard.txt
 
-OISD_LINK=https://raw.githubusercontent.com/sjhgvr/oisd/refs/heads/main/domainswild2_small.txt
+OISD_LINK=https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild2_small.txt
 OISD_PATH=download/oisd-include-adblock-hosts.txt
 
 DISCORD_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/discord-ips.txt
@@ -130,8 +130,8 @@ source setup
 if [[ -z "$1" || "$1" == 'host' || "$1" == 'hosts' || "$1" == 'noclear' || "$1" == 'noclean' ]]; then
 	download $DOMAIN_PATH $DOMAIN_LINK
 	( download $DOMAIN2_PATH $DOMAIN2_LINK ) || true
-	download $DENY_PATH $DENY_LINK
-	download $DENY2_PATH $DENY2_LINK
+	download $DENY_RPZ_PATH $DENY_RPZ_LINK
+	download $DENY2_RPZ_PATH $DENY2_RPZ_LINK
 	download $INCLUDE_HOSTS_PATH $INCLUDE_HOSTS_LINK
 	download $REMOVE_HOSTS_PATH $REMOVE_HOSTS_LINK
 

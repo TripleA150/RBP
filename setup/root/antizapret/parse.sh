@@ -193,20 +193,22 @@ if [[ -z "$1" || "$1" == 'host' || "$1" == 'hosts' || "$1" == 'noclear' || "$1" 
 	echo "$(wc -l < result/exclude-adblock-hosts.txt) - exclude-adblock-hosts.txt"
 
 	# Создаем файлы deny.rpz и deny2.rpz для Knot Resolver
-	echo -e '$TTL 10800\n@ SOA . . (1 1 1 1 10800)' > result/deny.rpz
-	echo -e '$TTL 10800\n@ SOA . . (1 1 1 1 10800)' > result/deny2.rpz
+	echo -e '$TTL 10800\n@ SOA . . (1 1 1 1 10800)' > temp/deny.rpz
+	echo -e '$TTL 10800\n@ SOA . . (1 1 1 1 10800)' > temp/deny2.rpz
 
 	if [[ "$ANTIZAPRET_ADBLOCK" == 'y' ]]; then
-		sed 's/$/ CNAME ./; p; s/^/*./' result/include-adblock-hosts.txt >> result/deny.rpz
-		sed 's/$/ CNAME rpz-passthru./; p; s/^/*./' result/exclude-adblock-hosts.txt >> result/deny.rpz
+		sed 's/$/ CNAME ./; p; s/^/*./' result/include-adblock-hosts.txt >> temp/deny.rpz
+		sed 's/$/ CNAME rpz-passthru./; p; s/^/*./' result/exclude-adblock-hosts.txt >> temp/deny.rpz
 	fi
-	sed 's/\r//g; /^;/d; /^$/d' download/*deny.txt config/*deny.txt >> result/deny.rpz
+	sed 's/\r//g; /^;/d; /^$/d' download/*deny-rpz.txt config/*deny-rpz.txt >> temp/deny.rpz
+	cp temp/deny.rpz result/deny.rpz
 
 	if [[ "$VPN_ADBLOCK" == 'y' ]]; then
-		sed 's/$/ CNAME ./; p; s/^/*./' result/include-adblock-hosts.txt >> result/deny2.rpz
-		sed 's/$/ CNAME rpz-passthru./; p; s/^/*./' result/exclude-adblock-hosts.txt >> result/deny2.rpz
+		sed 's/$/ CNAME ./; p; s/^/*./' result/include-adblock-hosts.txt >> temp/deny2.rpz
+		sed 's/$/ CNAME rpz-passthru./; p; s/^/*./' result/exclude-adblock-hosts.txt >> temp/deny2.rpz
 	fi
-	sed 's/\r//g; /^;/d; /^$/d' download/*deny2.txt config/*deny2.txt >> result/deny2.rpz
+	sed 's/\r//g; /^;/d; /^$/d' download/*deny2-rpz.txt config/*deny2-rpz.txt >> temp/deny2.rpz
+	cp temp/deny2.rpz result/deny2.rpz
 
 	# Обновляем файл deny.rpz в Knot Resolver только если файл изменился
 	if [[ -f result/deny.rpz ]] && ! diff -q result/deny.rpz /etc/knot-resolver/deny.rpz; then
@@ -277,9 +279,11 @@ if [[ -z "$1" || "$1" == 'host' || "$1" == 'hosts' || "$1" == 'noclear' || "$1" 
 	echo "$(wc -l < result/exclude-hosts.txt) - exclude-hosts.txt"
 
 	# Создаем файл proxy.rpz для Knot Resolver
-	echo -e '$TTL 10800\n@ SOA . . (1 1 1 1 10800)' > result/proxy.rpz
-	sed '/^\.$/ s/.*/*. CNAME ./; t; s/$/ CNAME ./; p; s/^/*./' result/include-hosts.txt >> result/proxy.rpz
-	sed '/^\.$/ s/.*/*. CNAME rpz-passthru./; t; s/$/ CNAME rpz-passthru./; p; s/^/*./' result/exclude-hosts.txt >> result/proxy.rpz
+	echo -e '$TTL 10800\n@ SOA . . (1 1 1 1 10800)' > temp/proxy.rpz
+	sed '/^\.$/ s/.*/*. CNAME ./; t; s/$/ CNAME ./; p; s/^/*./' result/include-hosts.txt >> temp/proxy.rpz
+	sed '/^\.$/ s/.*/*. CNAME rpz-passthru./; t; s/$/ CNAME rpz-passthru./; p; s/^/*./' result/exclude-hosts.txt >> temp/proxy.rpz
+	sed 's/\r//g; /^;/d; /^$/d' config/*proxy-rpz.txt >> temp/proxy.rpz
+	cp temp/proxy.rpz result/proxy.rpz
 
 	# Обновляем файл proxy.rpz в Knot Resolver только если файл изменился
 	if [[ -f result/proxy.rpz ]] && ! diff -q result/proxy.rpz /etc/knot-resolver/proxy.rpz; then

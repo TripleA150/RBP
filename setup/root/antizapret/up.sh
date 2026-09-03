@@ -189,12 +189,7 @@ fi
 iptables -w -I FORWARD 2 -s $IP.28.0.0/15 -m set --match-set antizapret-drop dst -j DROP
 # Client and server isolation
 if [[ "$CLIENT_ISOLATION" == 'y' ]]; then
-	if [[ "$ANTIZAPRET_OUT_INTERFACE" == "$VPN_OUT_INTERFACE" ]]; then
-		iptables -w -I FORWARD 2 ! -i $ANTIZAPRET_OUT_INTERFACE -d $IP.28.0.0/15 -j DROP
-	else
-		iptables -w -I FORWARD 2 ! -i $ANTIZAPRET_OUT_INTERFACE -d $IP.29.0.0/16 -j DROP
-		iptables -w -I FORWARD 3 ! -i $VPN_OUT_INTERFACE -d $IP.28.0.0/16 -j DROP
-	fi
+	iptables -w -I FORWARD 2 -s $IP.28.0.0/15 -d $IP.28.0.0/15 -j DROP
 	iptables -w -I INPUT 2 -s $IP.28.0.0/15 -p tcp ! --dport 53 -j DROP
 	iptables -w -I INPUT 3 -s $IP.28.0.0/15 -p udp ! --dport 53 -j DROP
 fi
@@ -298,7 +293,7 @@ if [[ "$RESTRICT_FORWARD" == 'y' ]]; then
 fi
 # Mapping fake IP to real IP
 iptables -w -t nat -S ANTIZAPRET-MAPPING &>/dev/null || iptables -w -t nat -N ANTIZAPRET-MAPPING
-iptables -w -t nat -A PREROUTING -s $IP.29.0.0/16 -d $FAKE_IP.0.0/15 -j ANTIZAPRET-MAPPING
+iptables -w -t nat -A PREROUTING -s $IP.28.0.0/15 -d $FAKE_IP.0.0/15 -j ANTIZAPRET-MAPPING
 # SNAT/MASQUERADE VPN
 if [[ "$ANTIZAPRET_OUT_INTERFACE" == "$VPN_OUT_INTERFACE" && "$ANTIZAPRET_OUT_IP" == "$VPN_OUT_IP" ]]; then
 	if [[ -z "$ANTIZAPRET_OUT_IP" ]]; then
@@ -342,10 +337,10 @@ for dev in $(ls /sys/class/net); do
 done
 
 # Clear Knot Resolver cache
-if [[ "$(iptables -w -t nat -S ANTIZAPRET-MAPPING | wc -l)" -eq 1 ]]; then
-	count="$(echo 'cache.clear()' | socat - /run/knot-resolver/control/1 | grep -oE '[0-9]+' || echo 0)"
-	echo "AntiZapret DNS cache cleared: $count entries"
-fi
+count="$(echo 'cache.clear()' | socat - /run/knot-resolver/control/1 | grep -oE '[0-9]+' || echo 0)"
+echo "AntiZapret DNS cache cleared: $count entries"
+count="$(echo 'cache.clear()' | socat - /run/knot-resolver/control/2 | grep -oE '[0-9]+' || echo 0)"
+echo "VPN DNS cache cleared: $count entries"
 
 ./custom-up.sh
 exit 0

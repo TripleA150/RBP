@@ -64,11 +64,7 @@ iptables -w -D FORWARD -s $IP.29.0.0/16 -m connmark --mark 0x1 -m set ! --match-
 # Drop forwarding
 iptables -w -D FORWARD -s $IP.28.0.0/15 -m set --match-set antizapret-drop dst -j DROP
 # Client and server isolation
-iptables -w -D FORWARD ! -i $ANTIZAPRET_OUT_INTERFACE -d $IP.28.0.0/15 -j DROP
-iptables -w -D FORWARD ! -i $ANTIZAPRET_OUT_INTERFACE -d $IP.29.0.0/16 -j DROP
-iptables -w -D FORWARD ! -i $ANTIZAPRET_WARP_INTERFACE -d $IP.29.0.0/16 -j DROP
-iptables -w -D FORWARD ! -i $VPN_OUT_INTERFACE -d $IP.28.0.0/16 -j DROP
-iptables -w -D FORWARD ! -i $VPN_WARP_INTERFACE -d $IP.28.0.0/16 -j DROP
+iptables -w -D FORWARD -s $IP.28.0.0/15 -d $IP.28.0.0/15 -j DROP
 iptables -w -D INPUT -s $IP.28.0.0/15 -p tcp ! --dport 53 -j DROP
 iptables -w -D INPUT -s $IP.28.0.0/15 -p udp ! --dport 53 -j DROP
 # SSH protection
@@ -139,8 +135,6 @@ iptables -w -t nat -D POSTROUTING -s $IP.29.0.0/16 -o $ANTIZAPRET_OUT_INTERFACE 
 iptables -w -t nat -D POSTROUTING -s $IP.29.0.0/16 -o $ANTIZAPRET_OUT_INTERFACE -j SNAT --to-source $ANTIZAPRET_OUT_IP
 iptables -w -t nat -D POSTROUTING -s $IP.29.0.0/16 -o $ANTIZAPRET_WARP_INTERFACE -j MASQUERADE
 iptables -w -t nat -D POSTROUTING -s $IP.29.0.0/16 -o $ANTIZAPRET_WARP_INTERFACE -j SNAT --to-source $ANTIZAPRET_WARP_IP
-iptables -w -t nat -D POSTROUTING -s $IP.28.0.0/16 -o $VPN_OUT_INTERFACE -j MASQUERADE
-iptables -w -t nat -D POSTROUTING -s $IP.28.0.0/16 -o $VPN_OUT_INTERFACE -j SNAT --to-source $VPN_OUT_IP
 iptables -w -t nat -D POSTROUTING -s $IP.28.0.0/16 -o $VPN_WARP_INTERFACE -j MASQUERADE
 iptables -w -t nat -D POSTROUTING -s $IP.28.0.0/16 -o $VPN_WARP_INTERFACE -j SNAT --to-source $VPN_WARP_IP
 
