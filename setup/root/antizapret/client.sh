@@ -146,10 +146,16 @@ deleteOpenVPN(){
 	setServerHost_FileName "$OPENVPN_HOST"
 	echo
 
-	/usr/share/easy-rsa/easyrsa --batch revoke "$CLIENT_NAME"
-	EASYRSA_CRL_DAYS=3650 /usr/share/easy-rsa/easyrsa gen-crl
-	chmod 755 /etc/openvpn/easyrsa3/pki
-	chmod 644 /etc/openvpn/easyrsa3/pki/crl.pem
+	if [[ -f /etc/openvpn/easyrsa3/pki/issued/"$CLIENT_NAME".crt ]]; then
+		/usr/share/easy-rsa/easyrsa --batch revoke "$CLIENT_NAME"
+		EASYRSA_CRL_DAYS=3650 /usr/share/easy-rsa/easyrsa gen-crl
+		chmod 755 /etc/openvpn/easyrsa3/pki
+		chmod 644 /etc/openvpn/easyrsa3/pki/crl.pem
+	else
+		echo "Certificate for client '$CLIENT_NAME' not found, skipping revoke"
+		rm -f /etc/openvpn/easyrsa3/pki/reqs/"$CLIENT_NAME".req
+		rm -f /etc/openvpn/easyrsa3/pki/private/"$CLIENT_NAME".key
+	fi
 
 	rm -f /root/antizapret/client/openvpn/antizapret/"$FILE_NAME".ovpn
 	rm -f /root/antizapret/client/openvpn/antizapret-udp/"$FILE_NAME"-udp.ovpn
