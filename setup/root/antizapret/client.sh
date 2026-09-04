@@ -283,22 +283,24 @@ deleteWireGuard(){
 	setServerHost_FileName "$WIREGUARD_HOST"
 	echo
 
-	if ! grep -q "# Client = ${CLIENT_NAME}" "/etc/wireguard/antizapret.conf" && ! grep -q "# Client = ${CLIENT_NAME}" "/etc/wireguard/vpn.conf"; then
-		echo "Failed to delete client '$CLIENT_NAME'! Please check if client exists"
-		exit 7
+	if grep -q "# Client = ${CLIENT_NAME}" /etc/wireguard/antizapret.conf 2>/dev/null || \
+	   grep -q "# Client = ${CLIENT_NAME}" /etc/wireguard/vpn.conf 2>/dev/null; then
+		sed -i "/^# Client = ${CLIENT_NAME}$/,/^AllowedIPs/d" /etc/wireguard/antizapret.conf
+		sed -i "/^# Client = ${CLIENT_NAME}$/,/^AllowedIPs/d" /etc/wireguard/vpn.conf
+
+		sed -i '/^$/N;/^\n$/D' /etc/wireguard/antizapret.conf
+		sed -i '/^$/N;/^\n$/D' /etc/wireguard/vpn.conf
+
+		wg syncconf antizapret <(wg-quick strip antizapret 2>/dev/null) &>/dev/null || true
+		wg syncconf vpn <(wg-quick strip vpn 2>/dev/null) &>/dev/null || true
+	else
+		echo "Peer for client '$CLIENT_NAME' not found, skipping peer removal"
 	fi
 
-	sed -i "/^# Client = ${CLIENT_NAME}$/,/^AllowedIPs/d" /etc/wireguard/antizapret.conf
-	sed -i "/^# Client = ${CLIENT_NAME}$/,/^AllowedIPs/d" /etc/wireguard/vpn.conf
-
-	sed -i '/^$/N;/^\n$/D' /etc/wireguard/antizapret.conf
-	sed -i '/^$/N;/^\n$/D' /etc/wireguard/vpn.conf
-
+	rm -f /root/antizapret/client/{wireguard,amneziawg}/antizapret/"$FILE_NAME".conf
 	rm -f /root/antizapret/client/{wireguard,amneziawg}/antizapret/"$FILE_NAME"-*.conf
+	rm -f /root/antizapret/client/{wireguard,amneziawg}/vpn/vpn-"$FILE_NAME".conf
 	rm -f /root/antizapret/client/{wireguard,amneziawg}/vpn/vpn-"$FILE_NAME"-*.conf
-
-	wg syncconf antizapret <(wg-quick strip antizapret 2>/dev/null) &>/dev/null || true
-	wg syncconf vpn <(wg-quick strip vpn 2>/dev/null) &>/dev/null || true
 
 	echo "WireGuard/AmneziaWG client '$CLIENT_NAME' successfully deleted"
 }
@@ -394,14 +396,13 @@ deleteOpenConnect(){
 	setServerHost_FileName "$OPENCONNECT_HOST"
 	echo
 
-	if ! grep -q "^${CLIENT_NAME}:" /etc/ocserv/secrets; then
-		echo "Failed to delete client '$CLIENT_NAME'! Please check if client exists"
-		exit 10
+	if grep -q "^${CLIENT_NAME}:" /etc/ocserv/secrets 2>/dev/null; then
+		sed -i "/^${CLIENT_NAME}:/d" /etc/ocserv/antizapret.passwd
+		sed -i "/^${CLIENT_NAME}:/d" /etc/ocserv/vpn.passwd
+		sed -i "/^${CLIENT_NAME}:/d" /etc/ocserv/secrets
+	else
+		echo "Account for client '$CLIENT_NAME' not found, skipping account removal"
 	fi
-
-	sed -i "/^${CLIENT_NAME}:/d" /etc/ocserv/antizapret.passwd
-	sed -i "/^${CLIENT_NAME}:/d" /etc/ocserv/vpn.passwd
-	sed -i "/^${CLIENT_NAME}:/d" /etc/ocserv/secrets
 
 	rm -f /root/antizapret/client/openconnect/antizapret/"$FILE_NAME".txt
 	rm -f /root/antizapret/client/openconnect/vpn/vpn-"$FILE_NAME".txt
