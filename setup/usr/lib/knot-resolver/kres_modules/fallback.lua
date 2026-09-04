@@ -6,9 +6,15 @@ ffi.cdef("void kr_server_selection_init(struct kr_query *qry);")
 
 local M = {
 	layer = {},
-	timeout = 2 * sec,
-	-- Cloudflare + Quad9 + ControlD + UltraDNS + OpenDNS + DNS4EU
-	action = policy.FORWARD({'1.1.1.1', '9.9.9.10@9953', '76.76.2.0', '64.6.64.6', '208.67.222.222@443', '86.54.11.100'})
+	-- Must stay above cache.ns_tout so the upstream gets a chance to finish its TLS handshake
+	timeout = 5 * sec,
+	-- Cloudflare + Quad9 + ControlD + DNS4EU over TLS
+	action = policy.TLS_FORWARD({
+		{'1.1.1.1', hostname = 'cloudflare-dns.com'},
+		{'9.9.9.10', hostname = 'dns10.quad9.net'},
+		{'76.76.2.0', hostname = 'p0.freedns.controld.com'},
+		{'86.54.11.100', hostname = 'unfiltered.joindns4.eu'}
+	})
 }
 
 local fallback = {}
