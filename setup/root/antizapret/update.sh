@@ -39,10 +39,10 @@ DOMAIN_PATH=download/bol-van-domain.txt
 DOMAIN2_LINK=https://antifilter.download/list/domains.lst
 DOMAIN2_PATH=download/antifilter-download-domain.txt
 
-DENY_RPZ_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny-rpz.txt
+DENY_RPZ_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/deny-rpz.txt
 DENY_RPZ_PATH=download/deny-rpz.txt
 
-DENY2_RPZ_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/deny2-rpz.txt
+DENY2_RPZ_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/deny2-rpz.txt
 DENY2_RPZ_PATH=download/deny2-rpz.txt
 
 INCLUDE_HOSTS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/include-hosts.txt
@@ -66,37 +66,37 @@ ADGUARD_PATH=download/adguard.txt
 OISD_LINK=https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild2_small.txt
 OISD_PATH=download/oisd-include-adblock-hosts.txt
 
-DISCORD_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/discord-ips.txt
+DISCORD_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/discord-ips.txt
 DISCORD_IPS_PATH=download/discord-ips.txt
 
-CLOUDFLARE_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/cloudflare-ips.txt
+CLOUDFLARE_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/cloudflare-ips.txt
 CLOUDFLARE_IPS_PATH=download/cloudflare-ips.txt
 
-AMAZON_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/amazon-ips.txt
+AMAZON_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/amazon-ips.txt
 AMAZON_IPS_PATH=download/amazon-ips.txt
 
-HETZNER_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/hetzner-ips.txt
+HETZNER_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/hetzner-ips.txt
 HETZNER_IPS_PATH=download/hetzner-ips.txt
 
-DIGITALOCEAN_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/digitalocean-ips.txt
+DIGITALOCEAN_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/digitalocean-ips.txt
 DIGITALOCEAN_IPS_PATH=download/digitalocean-ips.txt
 
-OVH_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/ovh-ips.txt
+OVH_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/ovh-ips.txt
 OVH_IPS_PATH=download/ovh-ips.txt
 
-TELEGRAM_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/telegram-ips.txt
+TELEGRAM_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/telegram-ips.txt
 TELEGRAM_IPS_PATH=download/telegram-ips.txt
 
-GOOGLE_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/google-ips.txt
+GOOGLE_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/google-ips.txt
 GOOGLE_IPS_PATH=download/google-ips.txt
 
-AKAMAI_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/akamai-ips.txt
+AKAMAI_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/akamai-ips.txt
 AKAMAI_IPS_PATH=download/akamai-ips.txt
 
-WHATSAPP_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/whatsapp-ips.txt
+WHATSAPP_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/whatsapp-ips.txt
 WHATSAPP_IPS_PATH=download/whatsapp-ips.txt
 
-ROBLOX_IPS_LINK=https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/setup/root/antizapret/download/roblox-ips.txt
+ROBLOX_IPS_LINK=https://raw.githubusercontent.com/TripleA150/RBP/main/setup/root/antizapret/download/roblox-ips.txt
 ROBLOX_IPS_PATH=download/roblox-ips.txt
 
 PROXY=https://proxy.cors.sh/
