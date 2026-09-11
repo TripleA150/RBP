@@ -58,6 +58,23 @@ if [[ ! -f "config/proxy-rpz.txt" ]]; then
 ; CNAME . добавляет домен для маршрутизации через AntiZapret VPN
 ;' > config/proxy-rpz.txt
 fi
+
+if [[ ! -f "config/sing-domains.txt" ]]; then
+	echo '# Добавление доменов для маршрутизации через sing-box
+#
+# Формат записи: example.com
+# Где:
+#   example.com - доменное имя в кодировке ASCII или Punycode
+#
+# Примеры записи:
+#   subdomain.example.com  - добавление домена третьего уровня subdomain.example.com и всех его поддоменов
+#   example.com            - добавление домена второго уровня example.com и всех его поддоменов
+#   xn--80aswg.xn--p1ai    - добавление домена второго уровня сайт.рф и всех его поддоменов (кодировка Punycode)
+#
+# Строки начинающиеся с # это комментарии и они не обрабатываются
+#
+' > config/sing-domains.txt
+fi
 ###
 
 for file in config/*.txt; do
@@ -326,6 +343,24 @@ if [[ -z "$1" || "$1" == 'host' || "$1" == 'hosts' || "$1" == 'noclear' || "$1" 
 	if [[ -f result/proxy.rpz ]] && ! diff -q result/proxy.rpz /etc/knot-resolver/proxy.rpz; then
 		cp -f result/proxy.rpz /etc/knot-resolver/proxy.rpz.tmp
 		mv -f /etc/knot-resolver/proxy.rpz.tmp /etc/knot-resolver/proxy.rpz
+		sleep 5
+	fi
+
+	# Обрабатываем список доменов для маршрутизации через sing-box
+	sed -E 's/[\r[:space:]]+//g; /^[[:punct:]]/d; /^$/d; s/[]_~:/?#\[@!$&'\''()*+,;=].*//; s/\.+$//; s/.*/\L&/' config/*sing-domains.txt | sort -u > result/sing-hosts.txt
+
+	# Выводим результат
+	echo "$(wc -l < result/sing-hosts.txt) - sing-hosts.txt"
+
+	# Создаем файл sing.rpz для Knot Resolver
+	echo -e '$TTL 10800\n@ SOA . . (1 1 1 1 10800)' > temp/sing.rpz
+	sed 's/$/ CNAME ./; p; s/^/*./' result/sing-hosts.txt >> temp/sing.rpz
+	cp temp/sing.rpz result/sing.rpz
+
+	# Обновляем файл sing.rpz в Knot Resolver только если файл изменился
+	if [[ -f result/sing.rpz ]] && ! diff -q result/sing.rpz /etc/knot-resolver/sing.rpz; then
+		cp -f result/sing.rpz /etc/knot-resolver/sing.rpz.tmp
+		mv -f /etc/knot-resolver/sing.rpz.tmp /etc/knot-resolver/sing.rpz
 		sleep 5
 	fi
 
