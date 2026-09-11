@@ -191,8 +191,8 @@ until [[ "$ALTERNATIVE_CLIENT_IP" =~ (y|n) ]]; do
 done
 echo
 [[ "$ALTERNATIVE_CLIENT_IP" == 'y' ]] && IP=172 || IP=10
-echo "Default FAKE IP address range:     $IP.30.0.0/15"
-echo 'Alternative FAKE IP address range: 198.18.0.0/15'
+echo "Default FAKE IP address range:     $IP.30.0.0/16"
+echo 'Alternative FAKE IP address range: 198.18.0.0/16'
 until [[ "$ALTERNATIVE_FAKE_IP" =~ (y|n) ]]; do
 	read -rp 'Use alternative range of FAKE IP addresses? [y/n]: ' -e -i n ALTERNATIVE_FAKE_IP
 done
@@ -603,13 +603,13 @@ elif [[ "$VPN_DNS" == '9' ]]; then
 fi
 
 # Не используем альтернативный диапазон подменных IPv4-адресов
-# 198.18.0.0/15 => 10.30.0.0/15 или 172.30.0.0/15
+# 198.18.0.0/16 => 10.30.0.0/16 или 172.30.0.0/16
 if [[ "$ALTERNATIVE_FAKE_IP" == 'n' ]]; then
 	sed -i "s/198\.18\./${IP}\.30\./g" /root/antizapret/proxy.py
 fi
 
 # Используем альтернативный диапазон клиентских IPv4-адресов
-# 10.28.0.0/15 => 172.28.0.0/15
+# 10.28.0.0/16 => 172.28.0.0/16
 if [[ "$ALTERNATIVE_CLIENT_IP" == 'y' ]]; then
 	sed -i 's/\b10\.2\([89]\)\./172.2\1./g' /etc/knot-resolver/kresd.conf
 	sed -i 's/\b10\.2\([89]\)\./172.2\1./g' /etc/openvpn/server/*.conf

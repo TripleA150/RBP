@@ -289,11 +289,11 @@ if [[ "$VPN_DNS" == '1' ]]; then
 fi
 # Restrict forwarding
 if [[ "$RESTRICT_FORWARD" == 'y' ]]; then
-	iptables -w -t nat -A PREROUTING -s $IP.29.0.0/16 ! -d $FAKE_IP.0.0/15 -j CONNMARK --set-mark 0x1
+	iptables -w -t nat -A PREROUTING -s $IP.29.0.0/16 ! -d $FAKE_IP.0.0/16 -j CONNMARK --set-mark 0x1
 fi
 # Mapping fake IP to real IP
 iptables -w -t nat -S ANTIZAPRET-MAPPING &>/dev/null || iptables -w -t nat -N ANTIZAPRET-MAPPING
-iptables -w -t nat -A PREROUTING -s $IP.28.0.0/15 -d $FAKE_IP.0.0/15 -j ANTIZAPRET-MAPPING
+iptables -w -t nat -A PREROUTING -s $IP.28.0.0/15 -d $FAKE_IP.0.0/16 -j ANTIZAPRET-MAPPING
 # SNAT/MASQUERADE VPN
 if [[ "$ANTIZAPRET_OUT_INTERFACE" == "$VPN_OUT_INTERFACE" && "$ANTIZAPRET_OUT_IP" == "$VPN_OUT_IP" ]]; then
 	if [[ -z "$ANTIZAPRET_OUT_IP" ]]; then

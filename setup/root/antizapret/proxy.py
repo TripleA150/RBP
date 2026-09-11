@@ -312,7 +312,7 @@ if __name__=="__main__":
     p=argparse.ArgumentParser(description="DNS Proxy")
     p.add_argument("--dns",default="127.2.2.2:53",help="Upstream DNS server:port (default:127.2.2.2:53)")
     p.add_argument("--dns-timeout",type=float,default=5,help="Upstream DNS timeout (default: 5s)")
-    p.add_argument("--ip-range",default="198.18.0.0/15",help="Fake IP range (default:198.18.0.0/15)")
+    p.add_argument("--ip-range",default="198.18.0.0/16",help="Fake IP range (default:198.18.0.0/16)")
     p.add_argument("--ttl",type=int,default=1800,help="TTL in seconds for A records (default: 1800)")
     p.add_argument("--expire",type=int,default=0,help="Seconds of inactivity before fake IP is removed (default: ttl * 2)")
     p.add_argument("--quarantine",type=int,default=-1,help="Seconds a released fake IP is withheld before reuse (default: ttl)")
