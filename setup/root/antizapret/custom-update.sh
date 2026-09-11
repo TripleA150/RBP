@@ -24,6 +24,7 @@ FILES=(
 	include-adblock-hosts.txt
 	include-hosts.txt
 	include-ips.txt
+	sing-domains.txt
 	remove-hosts.txt
 	deny-rpz.txt
 	deny2-rpz.txt
