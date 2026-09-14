@@ -84,6 +84,7 @@ paradox.com
 plaud.ai
 textures.com
 tunein.com
+ugoos.com
 vatsim.net
 xpilot-project.org
 
