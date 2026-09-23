@@ -21,7 +21,6 @@ if [[ "$(systemd-detect-virt)" == 'openvz' || "$(systemd-detect-virt)" == 'lxc' 
 fi
 
 # Проверка версии системы
-# lsb_release отсутствует на минимальной установке, читаем /etc/os-release
 if [[ ! -r /etc/os-release ]]; then
 	echo 'Error: /etc/os-release not found, cannot detect your Linux distribution!' >&2
 	exit 7
@@ -31,8 +30,6 @@ OS="${ID,,}"
 VERSION="${VERSION_ID%%.*}"
 OS_PRETTY="${PRETTY_NAME:-$OS $VERSION_ID}"
 
-# У Debian testing/sid и прочих rolling-релизов VERSION_ID в os-release отсутствует,
-# без этой проверки версия оказалась бы пустой и в тексте ошибки зияла бы дыра
 if [[ -z "$VERSION" ]]; then
 	echo "Error: your distribution ($OS_PRETTY) has no version number in /etc/os-release!" >&2
 	echo 'Rolling releases like Debian testing/sid are not supported, use a stable release' >&2
