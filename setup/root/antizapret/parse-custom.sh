@@ -1,5 +1,5 @@
 #!/bin/bash
-# Генерирует файлы маршрутов для Keenetic (AmneziaWG) и OpenVPN
+# Генерирует файлы маршрутов для Keenetic (AmneziaWG), OpenVPN и OpenConnect
 # из списка IP-адресов config/include-ips-custom.txt
 #
 # Использование: ./parse-custom.sh [каталог]
@@ -9,6 +9,11 @@
 # Переменные окружения:
 #   GATEWAY - шлюз для маршрутов Keenetic (по умолчанию 10.29.8.1,
 #             либо <CLIENT_IP>.29.8.1 при ALTERNATIVE_CLIENT_IP=y в файле setup)
+#
+# Результат:
+#   keenetic-awg-routes-custom.txt - route ADD <сеть> MASK <маска> <шлюз>
+#   openvpn-routes-custom.txt      - route <сеть> <маска>
+#   openconnect-routes-custom.txt  - route = <сеть>/<маска> (формат ocserv)
 
 set -e
 export LC_ALL=C
@@ -25,6 +30,7 @@ cd "$DIR"
 INPUT=config/include-ips-custom.txt
 KEENETIC_OUT=result/keenetic-awg-routes-custom.txt
 OPENVPN_OUT=result/openvpn-routes-custom.txt
+OPENCONNECT_OUT=result/openconnect-routes-custom.txt
 
 if [[ ! -f "$INPUT" ]]; then
 	echo "File not found: $DIR/$INPUT" >&2
@@ -43,8 +49,8 @@ fi
 
 sed -E 's/[\r[:space:]]+//g; /^[[:punct:]]/d; /^$/d' "$INPUT" | sort -u \
 | awk -F'[/.]' 'NF==5 && $1>=0 && $1<=255 && $2>=0 && $2<=255 && $3>=0 && $3<=255 && $4>=0 && $4<=255 && $5>=1 && $5<=32 {print}' \
-| awk -F'/' -v gw="$GATEWAY" -v keenetic="$KEENETIC_OUT" -v openvpn="$OPENVPN_OUT" '
-	BEGIN { printf "" > keenetic; printf "" > openvpn }
+| awk -F'/' -v gw="$GATEWAY" -v keenetic="$KEENETIC_OUT" -v openvpn="$OPENVPN_OUT" -v openconnect="$OPENCONNECT_OUT" '
+	BEGIN { printf "" > keenetic; printf "" > openvpn; printf "" > openconnect }
 	{
 		net = $1; bits = $2
 		mask = ""
@@ -57,7 +63,9 @@ sed -E 's/[\r[:space:]]+//g; /^[[:punct:]]/d; /^$/d' "$INPUT" | sort -u \
 		}
 		print "route ADD " net " MASK " mask " " gw > keenetic
 		print "route " net " " mask > openvpn
+		print "route = " net "/" mask > openconnect
 	}'
 
 echo "$(wc -l < "$KEENETIC_OUT") - $KEENETIC_OUT"
 echo "$(wc -l < "$OPENVPN_OUT") - $OPENVPN_OUT"
+echo "$(wc -l < "$OPENCONNECT_OUT") - $OPENCONNECT_OUT"
