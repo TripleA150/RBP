@@ -32,6 +32,11 @@ nekretnine.rs
 sipeed.com
 vipcards.tv
 
+# Allegro
+allegro.pl
+allegroimg.com
+allegrostatic.com
+
 # CanalPlus
 canalplus.com
 canalplus.pro
